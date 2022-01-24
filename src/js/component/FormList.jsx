@@ -6,6 +6,42 @@ const FormList = () => {
 	const [todoEditing, setTodoEditing] = React.useState(null);
 	const [editingText, setEditingText] = React.useState("");
 
+	useEffect(() => {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/bpiuma", {
+			method: "GET",
+			headers: { "Content-Type": "application/json" }
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(data => {
+				setItems(data);
+				return data;
+			})
+			.catch(error => {
+				setError(error);
+				console.log(error);
+			});
+	}, []);
+
+	//ADDING NEW ITEMS TO THE API
+	const saveData = () => {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/bpiuma", {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(items)
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(data => {
+				console.log(data);
+			})
+			.catch(error => {
+				setError(error);
+			});
+	};
+
 	React.useEffect(() => {
 		//The getItem () method of the Storage interface returns the value of the key whose name is passed to it by parameter
 		const json = localStorage.getItem("todos");
